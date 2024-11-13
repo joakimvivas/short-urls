@@ -20,11 +20,11 @@ python init-urls-json-file.py
 
 ### View All URLs
 
-![View All URLs](Dashboard-view-all-urls.png)
+![View All URLs](Dashboard-View-All-URLs.png)
 
 ### Edit URL
 
-![Edit URL](Dashboard-edit-shorturl.png)
+![Edit URL](Dashboard-Edit-ShortURL.png)
 
 ## Requirements
 
