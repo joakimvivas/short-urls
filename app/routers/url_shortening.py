@@ -8,7 +8,7 @@ from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory="app/templates")
 
-router = APIRouter()
+router = APIRouter(include_in_schema=False)
 
 # Show the form to shorten a URL
 @router.get("/shorten-url", dependencies=[Depends(require_authentication)])

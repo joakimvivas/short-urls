@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory="app/templates")
 
-router = APIRouter()
+router = APIRouter(include_in_schema=False)
 
 # Home page
 @router.get("/")

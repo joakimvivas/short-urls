@@ -2,13 +2,13 @@
 
 The Short URL generator is a web application that generates short URLs for a given long URL. The application uses the [FastAPI](https://fastapi.tiangolo.com/) framework and the [Jinja2 Templates](https://jinja.palletsprojects.com/en/3.0.x/) library to generate the short URLs. The application also includes a login system to ensure that only authorized users can access the application.
 
-The database is stored in a JSON file, which is encrypted using the [cryptography](https://cryptography.io/en/latest/) library. The encryption key is stored in an environment variable, which is used to decrypt the JSON file. The encryption key is generated using the `generate-key.py` script, which can be run using the following command:
+The database is stored in a JSON file, which is encrypted using the [cryptography](https://cryptography.io/en/latest/) library. The encryption key is stored in an environment variable, which is used to decrypt the JSON file. The encryption key is generated using the `app/scripts/generate-key.py` script, which can be run using the following command:
 
 ```bash
 python generate-key.py
 ```
 
-The `generate-key.py` script generates a random key and prints it to the console. If you want also to initialize the database, you can run the `init-urls-json-file.py` script, this script initializes the database (urls.json) with an empty array.:
+The `app/scripts/generate-key.py` script generates a random key and prints it to the console. If you want also to initialize the database, you can run the `init-urls-json-file.py` script, this script initializes the database (urls.json) with an empty array.:
 
 ```bash
 python init-urls-json-file.py
@@ -16,15 +16,33 @@ python init-urls-json-file.py
 
 ### Create Short URL
 
+You can create a new short URL by providing the original URL and a short name.
+
 ![Create Short URL](Dashboard-create-shorter.png)
 
 ### View All URLs
+
+You can view all the URLs created by the application and also by the API.
 
 ![View All URLs](Dashboard-View-All-URLs.png)
 
 ### Edit URL
 
+You can edit the original URL, short name, and description of a URL.
+
 ![Edit URL](Dashboard-Edit-ShortURL.png)
+
+### Managing API Tokens
+
+You can create and manage API tokens to access the API endpoints.
+
+![Managing API Tokens](Dashboard-create-token.png)
+
+### API Documentation
+
+You can find the API documentation published automatically in the [Swagger UI](http://localhost:3000/docs). Through this documentation, you can easily interact with the API endpoints, for example, to create a new URL, edit an existing URL, or delete a URL.
+
+![API Documentation](Dashboard-API-Docs.png)
 
 ## Requirements
 

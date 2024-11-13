@@ -1,0 +1,23 @@
+<!-- app/templates/tokens.html -->
+{% extends "base.html" %}
+
+{% block title %}Manage API Tokens{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl font-bold mb-4">API Tokens</h1>
+
+    <!-- Formulario para crear un nuevo token -->
+    <form action="/tokens/create" method="post" class="mb-6">
+        <label for="description" class="block mb-2">Token Description</label>
+        <input type="text" name="description" id="description" class="border p-2 w-full mb-4" required>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create Token</button>
+    </form>
+
+    <!-- Listado de tokens -->
+    <h2 class="text-xl font-bold mb-4">Existing Tokens</h2>
+    <ul class="list-disc pl-5">
+        {% for token in tokens %}
+        <li>{{ token["description"] }} - <span class="font-mono">{{ token["token"] }}</span></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

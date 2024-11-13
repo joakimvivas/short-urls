@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
 from ..database import read_urls
 
-router = APIRouter()
+router = APIRouter(include_in_schema=False)
 
 # Endpoint to redirect to a URL (Public Endpoint)
 @router.get("/{short_name}")

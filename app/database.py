@@ -1,11 +1,14 @@
 import json
 import os
+import secrets
 from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 from .models import URL
+from typing import List, Dict
 
 load_dotenv()
 DATA_FILE = "app/urls.json"
+TOKENS_FILE = "app/tokens.json"
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
 
 if not ENCRYPTION_KEY:
@@ -44,16 +47,50 @@ def read_urls():
 def write_url(new_url: URL):
     data = read_urls()
     
-    # Buscar si el id ya existe y reemplazar la URL en lugar de añadirla
+    # Find the index of the existing URL with the same id
     for i, url_data in enumerate(data):
-        if url_data["id"] == new_url.id:  # Comparación basada en id
-            data[i] = new_url.dict()  # Reemplazar la entrada existente
+        if url_data["id"] == new_url.id:  # Comparing the id
+            data[i] = new_url.dict()  # Replace the existing URL with the new one
             break
     else:
-        data.append(new_url.dict())  # Añadir una nueva entrada si no existe
+        data.append(new_url.dict())  # Adding a new URL if it doesn't exist
 
-    # Guardar los datos actualizados, cifrados, en el archivo
+    # Save the updated data
     with open(DATA_FILE, 'wb') as f:
         encrypted_data = encrypt_data(data)
         f.write(encrypted_data)
 
+# Read tokens
+def read_tokens() -> List[Dict]:
+    if os.path.exists(TOKENS_FILE):
+        with open(TOKENS_FILE, 'rb') as f:
+            encrypted_data = f.read()
+            if encrypted_data:
+                return decrypt_data(encrypted_data)
+            else:
+                return []
+    else:
+        # If the file doesn't exist, create an empty list and encrypt it
+        with open(TOKENS_FILE, 'wb') as f:
+            f.write(encrypt_data([]))
+        return []
+
+# Save tokens
+def write_token(token_info: Dict):
+    tokens = read_tokens()
+    tokens.append(token_info)
+    with open(TOKENS_FILE, 'wb') as f:
+        encrypted_data = encrypt_data(tokens)
+        f.write(encrypted_data)
+
+# Generate a new token
+def generate_token(description: str) -> str:
+    token = secrets.token_hex(16)
+    token_info = {"token": token, "description": description}
+    write_token(token_info)
+    return token
+
+# Validate a token
+def validate_token(token: str) -> bool:
+    tokens = read_tokens()
+    return any(t["token"] == token for t in tokens)
