@@ -5,10 +5,10 @@ import secrets
 from dotenv import load_dotenv
 import os
 
-# Cargar variables de entorno desde .env
+# Loading environment variables from .env
 load_dotenv()
 
-# Usuario y contraseña desde el archivo .env
+# user and password from the .env file
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 

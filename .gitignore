@@ -3,6 +3,8 @@
 
 # Python env
 short-url-generator
+app/storage/tokens.json
+app/storage/urls.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
