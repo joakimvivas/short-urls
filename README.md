@@ -14,6 +14,18 @@ The `generate-key.py` script generates a random key and prints it to the console
 python init-urls-json-file.py
 ```
 
+### Create Short URL
+
+![Create Short URL](Dashboard-create-shorter.png)
+
+### View All URLs
+
+![View All URLs](Dashboard-view-all-urls.png)
+
+### Edit URL
+
+![Edit URL](Dashboard-edit-shorturl.png)
+
 ## Requirements
 
 - Python 3.8+
