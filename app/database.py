@@ -7,8 +7,8 @@ from .models import URL
 from typing import List, Dict
 
 load_dotenv()
-DATA_FILE = "app/urls.json"
-TOKENS_FILE = "app/tokens.json"
+DATA_FILE = "app/storage/urls.json"
+TOKENS_FILE = "app/storage/tokens.json"
 ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
 
 if not ENCRYPTION_KEY:
