@@ -1,0 +1,20 @@
+<!-- app/templates/edit_url.html -->
+{% extends "base.html" %}
+
+{% block title %}Edit URL{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">Edit Short URL</h1>
+<form action="/edit-url/{{ url['short_name'] }}" method="post" class="bg-white p-4 rounded shadow-md">
+    <label class="block mb-2">Original URL</label>
+    <input type="url" name="original_url" value="{{ url['original_url'] }}" class="border p-2 w-full mb-4" required>
+
+    <label class="block mb-2">Short Name</label>
+    <input type="text" name="new_short_name" value="{{ url['short_name'] }}" class="border p-2 w-full mb-4" maxlength="20" required>
+
+    <label class="block mb-2">Description</label>
+    <input type="text" name="description" value="{{ url['description'] }}" class="border p-2 w-full mb-4">
+
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Save Changes</button>
+</form>
+{% endblock %}

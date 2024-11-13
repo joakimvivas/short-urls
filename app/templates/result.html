@@ -1,0 +1,15 @@
+<!-- app/templates/result.html -->
+{% extends "base.html" %}
+
+{% block title %}Short URL Result{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">Your Short URL</h1>
+<p>Short URL: <a href="/{{ url['short_name'] }}" class="text-blue-500">localhost/{{ url['short_name'] }}</a></p>
+<p>Description: {{ url['description'] }}</p>
+
+<div class="mt-6 flex space-x-4">
+    <a href="/shorten-url" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create Another URL</a>
+    <a href="/urls" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">View All URLs</a>
+</div>
+{% endblock %}

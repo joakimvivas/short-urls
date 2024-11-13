@@ -1,0 +1,16 @@
+<!-- app/templates/shorten_url.html -->
+{% extends "base.html" %}
+
+{% block title %}Shorten URL{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1 class="text-3xl font-bold">Create Short URL</h1>
+</div>
+<form action="/shorten-url" method="post" class="bg-white p-4 rounded shadow-md">
+    <input type="url" name="original_url" placeholder="Original URL" class="border p-2 w-full mb-4" required>
+    <input type="text" name="short_name" placeholder="Short Name" class="border p-2 w-full mb-4" maxlength="20" required>
+    <input type="text" name="description" placeholder="Description" class="border p-2 w-full mb-4">
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Create</button>
+</form>
+{% endblock %}
