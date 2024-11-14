@@ -1,21 +1,24 @@
-# Usamos una imagen base de Python
+# Python base image
 FROM python:3.9-slim
 
-# Establecemos el directorio de trabajo
-WORKDIR /app
+# Create a directory for the app
+RUN mkdir /app
 
-# Copiamos el archivo de requisitos
-COPY requirements.txt .
+# Copy requirements.txt to the app directory
+COPY requirements.txt /app
 
-# Instalamos las dependencias
+# Update pip and install dependencies
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copiamos el resto del código de la aplicación
-COPY . .
+# Copy the rest of the code to the app directory
+COPY app/ /app
 
-# Exponemos el puerto en el que correrá la aplicación
+# Remove the storage directory
+RUN rm -rf /app/storage/*
+
+# Expose the port
 EXPOSE 3000
 
-# Comando para ejecutar la aplicación
+# Run the application
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "3000"]

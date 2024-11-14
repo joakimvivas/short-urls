@@ -5,8 +5,12 @@
 
 {% block content %}
 <h1 class="text-3xl font-bold mb-4">Your Short URL</h1>
-<p>Short URL: <a href="/{{ url['short_name'] }}" class="text-blue-500">localhost/{{ url['short_name'] }}</a></p>
-<p>Description: {{ url['description'] }}</p>
+<p><strong>ID:</strong> {{ url['id'] }}</p>
+<p><strong>Short URL:</strong> <a href="/{{ url['short_name'] }}" class="text-blue-500">{{ url['short_name'] }}</a></p>
+<p><strong>Original URL:</strong> <a href="{{ url['original_url'] }}" target="_blank" class="text-blue-500 hover:underline">{{ url['original_url'] }}</a></p>
+<p><strong>Description:</strong> {{ url['description'] }}</p>
+<p><strong>Created At:</strong> {{ url['created_at'] }}</p>
+<p><strong>Expirable:</strong> {% if url['expirable'] %}Yes{% else %}No{% endif %}</p>
 
 <div class="mt-6 flex space-x-4">
     <a href="/shorten-url" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create Another URL</a>

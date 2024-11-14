@@ -5,15 +5,25 @@
 
 {% block content %}
 <h1 class="text-3xl font-bold mb-4">Edit Short URL</h1>
-<form action="/edit-url/{{ url['short_name'] }}" method="post" class="bg-white p-4 rounded shadow-md">
+<form action="/edit-url/{{ url['id'] }}" method="post" class="bg-white p-4 rounded shadow-md">
+    <input type="hidden" name="id" value="{{ url['id'] }}">
+
     <label class="block mb-2">Original URL</label>
     <input type="url" name="original_url" value="{{ url['original_url'] }}" class="border p-2 w-full mb-4" required>
 
+    <!-- Campo short_name con restricción de caracteres -->
     <label class="block mb-2">Short Name</label>
-    <input type="text" name="new_short_name" value="{{ url['short_name'] }}" class="border p-2 w-full mb-4" maxlength="20" required>
+    <input type="text" name="new_short_name" value="{{ url['short_name'] }}" class="border p-2 w-full mb-4" maxlength="20" required
+        pattern="^[A-Za-z0-9_]+$" title="Short name can only contain alphanumeric characters and underscores.">
 
     <label class="block mb-2">Description</label>
     <input type="text" name="description" value="{{ url['description'] }}" class="border p-2 w-full mb-4">
+
+    <!-- Añadido mb-4 para crear espacio debajo del checkbox -->
+    <label for="expirable" class="inline-flex items-center mt-4 mb-4">
+        <input type="checkbox" name="expirable" id="expirable" class="form-checkbox" {% if url['expirable'] %}checked{% endif %}>
+        <span class="ml-2">Make URL Expirable</span>
+    </label>
 
     <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Save Changes</button>
 </form>

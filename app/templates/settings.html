@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">Settings</h1>
+<form action="/settings/" method="post" class="bg-white p-4 rounded shadow-md">
+    <label class="block mb-2">Default URL Expiration (in days)</label>
+    <input type="number" name="expiration_days" value="{{ settings['expiration_days'] }}" class="border p-2 w-full mb-4" required>
+    
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Save Settings</button>
+</form>
+{% endblock %}

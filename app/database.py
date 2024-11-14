@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 from .models import URL
 from typing import List, Dict
 import uuid
+from datetime import datetime
+from uuid import uuid4
 
 load_dotenv()
 DATA_FILE = "app/storage/urls.json"
@@ -45,18 +47,33 @@ def read_urls():
             f.write(encrypt_data([]))
         return []
 
+# Returns the next available ID based on the current data
+def get_next_id(data):
+    """Returns the next available ID based on the current data."""
+    if not data:
+        return 1
+    max_id = max(item['id'] for item in data)
+    return max_id + 1
+
+# Writes a new URL to the data file
 def write_url(new_url: URL):
     data = read_urls()
-    
-    # Find the index of the existing URL with the same id
-    for i, url_data in enumerate(data):
-        if url_data["id"] == new_url.id:  # Comparing the id
-            data[i] = new_url.dict()  # Replace the existing URL with the new one
+    url_data = new_url.dict()
+    if isinstance(url_data.get("created_at"), datetime):
+        url_data["created_at"] = url_data["created_at"].isoformat()
+
+    if not url_data.get("id"):
+        url_data["id"] = str(uuid4())
+    else:
+        url_data["id"] = str(url_data["id"])
+
+    for i, existing_url in enumerate(data):
+        if str(existing_url["id"]) == url_data["id"]:
+            data[i] = url_data
             break
     else:
-        data.append(new_url.dict())  # Adding a new URL if it doesn't exist
+        data.append(url_data)
 
-    # Save the updated data
     with open(DATA_FILE, 'wb') as f:
         encrypted_data = encrypt_data(data)
         f.write(encrypted_data)

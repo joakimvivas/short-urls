@@ -9,10 +9,13 @@
     <ul>
         {% for url in urls %}
         <li class="bg-white p-4 rounded shadow mb-4">
-            <p>Short URL: <a href="/{{ url['short_name'] }}" class="text-blue-500">localhost/{{ url['short_name'] }}</a></p>
-            <p>Original URL: <a href="{{ url['original_url'] }}" target="_blank" class="text-blue-500 hover:underline">{{ url['original_url'] }}</a></p>
-            <p>Description: {{ url['description'] }}</p>
-            <div class="flex space-x-4">
+            <p><strong>ID:</strong> {{ url['id'] }}</p>
+            <p><strong>Short URL:</strong> <a href="/{{ url['short_name'] }}" class="text-blue-500">{{ url['short_name'] }}</a></p>
+            <p><strong>Original URL:</strong> <a href="{{ url['original_url'] }}" target="_blank" class="text-blue-500 hover:underline">{{ url['original_url'] }}</a></p>
+            <p><strong>Description:</strong> {{ url['description'] }}</p>
+            <p><strong>Created At:</strong> {{ url['created_at'] }}</p>
+            <p><strong>Expirable:</strong> {{ "Yes" if url['expirable'] else "No" }}</p>
+            <div class="flex space-x-4 mt-2">
                 <a href="/edit-url/{{ url['short_name'] }}" class="text-gray-500 hover:underline">Edit</a>
                 <a href="/delete-url/{{ url['id'] }}" class="text-red-500 hover:underline">Delete</a> <!-- Botón de eliminar -->
             </div>
