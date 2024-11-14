@@ -19,7 +19,8 @@
     <label class="block mb-2">Description</label>
     <input type="text" name="description" value="{{ url['description'] }}" class="border p-2 w-full mb-4">
 
-    <label for="expirable" class="inline-flex items-center mt-4">
+    <!-- Añadido mb-4 para crear espacio debajo del checkbox -->
+    <label for="expirable" class="inline-flex items-center mt-4 mb-4">
         <input type="checkbox" name="expirable" id="expirable" class="form-checkbox" {% if url['expirable'] %}checked{% endif %}>
         <span class="ml-2">Make URL Expirable</span>
     </label>
