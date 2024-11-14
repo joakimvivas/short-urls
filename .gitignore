@@ -5,6 +5,7 @@
 short-url-generator
 app/storage/tokens.json
 app/storage/urls.json
+app/storage/settings.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

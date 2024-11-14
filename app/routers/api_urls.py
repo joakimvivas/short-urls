@@ -1,10 +1,19 @@
-# app/routers/api_urls.py
 from fastapi import APIRouter, HTTPException, Header, Depends, Form
 from ..database import read_urls, write_url, validate_token, DATA_FILE, encrypt_data
 from ..models import URL
 from typing import Optional
+from datetime import datetime
+from uuid import uuid4, UUID
+import re
+import logging
+
+# Configuration of logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["API V1"])
+
+SHORT_NAME_REGEX = re.compile(r"^[A-Za-z0-9_]+$")
 
 def api_token_dependency(api_token: str = Header(None)):
     if not validate_token(api_token):
@@ -20,40 +29,73 @@ async def list_urls():
 async def create_url(
     original_url: str = Form(...),
     short_name: str = Form(...),
-    description: str = Form(None)
+    description: Optional[str] = Form(None),
+    expirable: Optional[bool] = Form(True)
 ):
-    new_url = URL(id=len(read_urls()) + 1, original_url=original_url, short_name=short_name, description=description, created_by="api_user")
+    # Validation of the short_name
+    if not SHORT_NAME_REGEX.match(short_name):
+        raise HTTPException(
+            status_code=400,
+            detail="Short name can only contain alphanumeric characters and underscores."
+        )
+
+    new_url = URL(
+        id=str(uuid4()),
+        original_url=original_url,
+        short_name=short_name,
+        description=description,
+        created_by="api_user",
+        created_at=datetime.now(),
+        expirable=expirable
+    )
     write_url(new_url)
     return {"message": "URL created", "url": new_url}
 
 # Edit a URL
 @router.put("/api/v1/urls/{url_id}", dependencies=[Depends(api_token_dependency)])
 async def update_url(
-    url_id: int,
+    url_id: str,
     original_url: Optional[str] = Form(None),
     short_name: Optional[str] = Form(None),
-    description: Optional[str] = Form(None)
+    description: Optional[str] = Form(None),
+    expirable: Optional[bool] = Form(None)
 ):
+    logger.info(f"Received request to update URL with id: {url_id}")
+    
+    try:
+        uuid_obj = UUID(url_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid URL ID format.")
+
     data = read_urls()
     for url_data in data:
-        if url_data["id"] == url_id:
-            # Only update the fields that are not None
+        logger.info(f"Checking URL with id: {url_data['id']}")
+        
+        if url_data["id"] == str(uuid_obj):
             if original_url is not None:
                 url_data["original_url"] = original_url
             if short_name is not None:
+                # Validation of the short_name
+                if not SHORT_NAME_REGEX.match(short_name):
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Short name can only contain alphanumeric characters and underscores."
+                    )
                 url_data["short_name"] = short_name
             if description is not None:
                 url_data["description"] = description
-
-            # Guardar los cambios
+            if expirable is not None:
+                url_data["expirable"] = expirable
             write_url(URL(**url_data))
+            logger.info(f"URL with id: {url_id} updated successfully.")
             return {"message": "URL updated", "url": url_data}
     
+    logger.warning(f"URL with id: {url_id} not found.")
     raise HTTPException(status_code=404, detail="URL not found")
 
 # Delete a URL
 @router.delete("/api/v1/urls/{url_id}", dependencies=[Depends(api_token_dependency)])
-async def delete_url(url_id: int):
+async def delete_url(url_id: str):
     data = read_urls()
     updated_data = [url_data for url_data in data if url_data["id"] != url_id]
     if len(data) == len(updated_data):
