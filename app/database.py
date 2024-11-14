@@ -5,6 +5,7 @@ from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 from .models import URL
 from typing import List, Dict
+import uuid
 
 load_dotenv()
 DATA_FILE = "app/storage/urls.json"
@@ -86,7 +87,7 @@ def write_token(token_info: Dict):
 # Generate a new token
 def generate_token(description: str) -> str:
     token = secrets.token_hex(16)
-    token_info = {"token": token, "description": description}
+    token_info = {"id": str(uuid.uuid4()), "token": token, "description": description}  # Adding the UUID for the token
     write_token(token_info)
     return token
 
@@ -94,3 +95,24 @@ def generate_token(description: str) -> str:
 def validate_token(token: str) -> bool:
     tokens = read_tokens()
     return any(t["token"] == token for t in tokens)
+
+# Renew an existing token
+def renew_token_by_id(token_id: str) -> bool:
+    tokens = read_tokens()
+    for token in tokens:
+        if token["id"] == token_id:
+            token["token"] = secrets.token_hex(16)  # Generate a new token
+            with open(TOKENS_FILE, 'wb') as f:
+                f.write(encrypt_data(tokens))
+            return True
+    return False
+
+# Delete an existing token
+def delete_token_by_id(token_id: str) -> bool:
+    tokens = read_tokens()
+    updated_tokens = [token for token in tokens if token["id"] != token_id]
+    if len(updated_tokens) == len(tokens):  # If not deleted the token
+        return False
+    with open(TOKENS_FILE, 'wb') as f:
+        f.write(encrypt_data(updated_tokens))
+    return True

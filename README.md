@@ -34,7 +34,7 @@ You can edit the original URL, short name, and description of a URL.
 
 ### Managing API Tokens
 
-You can create and manage API tokens to access the API endpoints.
+You can create, renew and delete your API tokens to access the API endpoints.
 
 ![Managing API Tokens](Dashboard-create-token.png)
 
