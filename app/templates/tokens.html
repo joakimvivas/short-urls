@@ -13,11 +13,19 @@
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create Token</button>
     </form>
 
-    <!-- Listado de tokens -->
+    <!-- Listado de tokens con opciones de renovación y eliminación -->
     <h2 class="text-xl font-bold mb-4">Existing Tokens</h2>
     <ul class="list-disc pl-5">
         {% for token in tokens %}
-        <li>{{ token["description"] }} - <span class="font-mono">{{ token["token"] }}</span></li>
+        <li>
+            <span>{{ token["description"] }} - <span class="font-mono">{{ token["token"] }}</span></span>
+            <form action="/tokens/renew/{{ token['id'] }}" method="post" style="display: inline;">
+                <button type="submit" class="text-blue-500 hover:underline ml-4">Renew</button>
+            </form>
+            <form action="/tokens/delete/{{ token['id'] }}" method="post" style="display: inline;">
+                <button type="submit" class="text-red-500 hover:underline ml-2">Delete</button>
+            </form>
+        </li>
         {% endfor %}
     </ul>
 {% endblock %}
