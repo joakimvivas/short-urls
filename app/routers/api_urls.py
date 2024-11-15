@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Header, Depends, Form
 from ..database import read_urls, write_url, validate_token, DATA_FILE, encrypt_data
 from ..models import URL
+from ..routers.settings import read_settings
 from typing import Optional
 from datetime import datetime
 from uuid import uuid4, UUID
@@ -39,6 +40,9 @@ async def create_url(
             detail="Short name can only contain alphanumeric characters and underscores."
         )
 
+    settings = read_settings()
+    domain = settings.get("domain", "https://www.example.com")
+    
     new_url = URL(
         id=str(uuid4()),
         original_url=original_url,
@@ -49,7 +53,20 @@ async def create_url(
         expirable=expirable
     )
     write_url(new_url)
-    return {"message": "URL created", "url": new_url}
+    short_url = f"{domain}/{short_name}"
+    return {
+        "message": "URL created",
+        "url": {
+            "id": new_url.id,
+            "original_url": original_url,
+            "short_url": short_url,
+            "short_name": short_name,
+            "description": description,
+            "created_by": "api_user",
+            "expirable": expirable,
+            "created_at": new_url.created_at
+        }
+    }
 
 # Edit a URL
 @router.put("/api/v1/urls/{url_id}", dependencies=[Depends(api_token_dependency)])

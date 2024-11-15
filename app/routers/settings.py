@@ -16,7 +16,7 @@ SETTINGS_FILE = "app/storage/settings.json"
 
 # Read settings file
 def read_settings():
-    default_settings = {"expiration_days": 90}
+    default_settings = {"expiration_days": 90, "domain": "https://www.example.com"}
     try:
         with open(SETTINGS_FILE, 'r') as f:
             return json.load(f)
@@ -37,8 +37,8 @@ async def settings_page(request: Request):
 
 # Update settings
 @router.post("/", dependencies=[Depends(require_authentication)])
-async def update_settings(expiration_days: int = Form(...)):
-    settings = {"expiration_days": expiration_days}
+async def update_settings(expiration_days: int = Form(...), domain: str = Form(...)):
+    settings = {"expiration_days": expiration_days, "domain": domain}
     write_settings(settings)
-    logger.info(f"Settings updated successfully to {settings['expiration_days']} days.")
+    logger.info(f"Settings updated successfully: {settings}")
     return RedirectResponse(url="/settings/", status_code=302)
