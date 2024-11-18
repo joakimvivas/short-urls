@@ -16,9 +16,8 @@ router = APIRouter(include_in_schema=False)
 # Managing tokens (GET /tokens)
 @router.get("/", dependencies=[Depends(require_authentication)])
 async def manage_tokens(request: Request):
-    logger.info("Accessing /tokens endpoint")  # Log inicial para verificar acceso
+    logger.info("Accessing /tokens endpoint")
     tokens = read_tokens()
-    logger.info(f"Tokens read from file: {tokens}")
     return templates.TemplateResponse("tokens.html", {"request": request, "tokens": tokens})
 
 # Endpoint to create a new token (POST /tokens/create)
